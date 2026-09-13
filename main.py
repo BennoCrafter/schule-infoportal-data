@@ -1,29 +1,38 @@
 import asyncio
 import logging
 from contextlib import asynccontextmanager
+from datetime import datetime, time, timedelta
 
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.security import HTTPBasic
 
-from src.data_cycle import update_data_cycle
+from src.substitution_storage import SubstitutionStorage
 from src.utils.logging import setup_logging
 
 # --- Setup ---
 setup_logging()
 logger = logging.getLogger(__name__)
 
-INTERVAL_HOURS = 10
+RUN_AT = time(hour=22, minute=0)
+
+
+def seconds_until_next_run() -> float:
+    now = datetime.now()
+    next_run = datetime.combine(now.date(), RUN_AT)
+    if next_run <= now:
+        next_run += timedelta(days=1)
+    return (next_run - now).total_seconds()
 
 
 async def periodic_update_task():
     while True:
+        await asyncio.sleep(seconds_until_next_run())
+
         try:
-            update_data_cycle()
+            SubstitutionStorage.update()
         except Exception as e:
             logger.error(f"Error during periodic update: {e}")
-
-        await asyncio.sleep(INTERVAL_HOURS * 3600)
 
 
 @asynccontextmanager

@@ -1,9 +1,12 @@
 services:
-  schule-infoportal-api:
+  schule-infoportal-data:
     build: .
     container_name: schule-infoportal-data
     environment:
       PORT: 8090
+      DATA_DIR: /app/data
     ports:
       - "8090:8090"
+    volumes:
+      - ./data:/app/data
     restart: "on-failure"
