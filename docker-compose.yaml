@@ -1,0 +1,9 @@
+services:
+  schule-infoportal-api:
+    build: .
+    container_name: schule-infoportal-data
+    environment:
+      PORT: 8090
+    ports:
+      - "8090:8090"
+    restart: "on-failure"
