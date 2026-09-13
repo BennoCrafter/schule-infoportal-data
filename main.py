@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.security import HTTPBasic
 
+from src.data_cycle import update_data_cycle
 from src.utils.logging import setup_logging
 
 # --- Setup ---
@@ -18,8 +19,7 @@ INTERVAL_HOURS = 10
 async def periodic_update_task():
     while True:
         try:
-            logger.info("Starting periodic update...")
-            logger.info("Periodic update completed successfully.")
+            update_data_cycle()
         except Exception as e:
             logger.error(f"Error during periodic update: {e}")
 
@@ -40,8 +40,8 @@ async def lifespan(app: FastAPI):
         logger.info("Stopped periodic background worker.")
 
 
-app = FastAPI(title="Schule-Infoportal Data", version="1.0.0", lifespan=lifespan)
 security = HTTPBasic()
+app = FastAPI(title="schule-infoportal data", version="1.0.0", lifespan=lifespan)
 
 
 @app.get("/favicon.ico", include_in_schema=False)
