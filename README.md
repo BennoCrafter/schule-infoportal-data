@@ -1,6 +1,9 @@
 # schule-infoportal-data
 
-A self-hosted Docker container for storing all substitutions and news from schule-infoportal-api
+A self-hosted Docker container that fetches substitutions and news from schule-infoportal-api
+once a day (22:00, via cron) and stores them in a local SQLite database.
 
-run with `uvicorn main:app --reload --port 8090`
-or `docker compose up -d`
+Run with `docker compose up -d`.
+
+To trigger an update manually (e.g. for testing): `python main.py`.
+To change the schedule, edit the cron expression in the `crontab` file.

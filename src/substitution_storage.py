@@ -11,7 +11,7 @@ from src.models import News, Substitution
 
 dotenv.load_dotenv()
 login_username = os.getenv("LOGIN_USERNAME", "")
-login_password = os.getenv("PASSWORD", "")
+login_password = os.getenv("LOGIN_PASSWORD", "")
 
 BASE_URL = "https://schule-infoportal-api.vercel.app/"
 DATA_DIR = os.getenv("DATA_DIR", "./data")
